@@ -21,4 +21,11 @@ class AbstractGreetingMessageStrategy(abc.ABC):
 class DefaultGreetingMessageStrategy(AbstractGreetingMessageStrategy):
     @staticmethod
     def generate_message(weather: Weather) -> str:
-        return GreetingMessage.HEAVY_SNOW
+        message = GreetingMessage.OTHERS
+
+        if weather.status == WeatherStatus.SNOWY and weather.precipitation >= 100.0:
+            message = GreetingMessage.HEAVY_SNOW
+        elif weather.status == WeatherStatus.SNOWY:
+            message = GreetingMessage.SNOW
+
+        return message
