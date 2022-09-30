@@ -4,6 +4,7 @@ import pytest
 from faker import Faker
 
 from constants import WeatherStatus
+from model import Weather
 
 fake = Faker()
 
