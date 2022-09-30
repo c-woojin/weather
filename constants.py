@@ -14,6 +14,6 @@ class GreetingMessage(str, Enum):
     HEAVY_RAIN = "폭우가 내리고 있어요."
     RAIN = "비가 오고 있습니다."
     CLOUD = "날씨가 약간은 칙칙해요."
-    SUNNY = "따사로 햇살을 맞으세요."
+    SUNNY = "따사로운 햇살을 맞으세요."
     COLD = "날이 참 춥네요."
     OTHERS = "날씨가 참 맑습니다."
