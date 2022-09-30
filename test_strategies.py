@@ -8,7 +8,7 @@ from model import DefaultGreetingMessageStrategy
 
 class TestDefaultGreetingMessageStrategy:
     @pytest.mark.parametrize(
-        "weather_condition, expected_message", [(dict(status=WeatherStatus.SNOWY, precipitation=200.0), "폭설이 내리고 있어요")]
+        "weather_condition, expected_message", [(dict(status=WeatherStatus.SNOWY, precipitation=200.0), "폭설이 내리고 있어요.")]
     )
     def test_greeting_messages(self, weather_condition: Dict, expected_message: str, get_weather: Callable):
         weather = get_weather(

@@ -21,4 +21,4 @@ class AbstractGreetingMessageStrategy(abc.ABC):
 class DefaultGreetingMessageStrategy(AbstractGreetingMessageStrategy):
     @staticmethod
     def generate_message(weather: Weather) -> str:
-        pass
+        return "폭설이 내리고 있어요."
