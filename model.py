@@ -1,3 +1,4 @@
+import abc
 import dataclasses
 
 from constants import WeatherStatus
@@ -9,3 +10,15 @@ class Weather:
     status: WeatherStatus
     temperature: float
     precipitation: float
+
+
+class AbstractGreetingMessageStrategy(abc.ABC):
+    @staticmethod
+    def generate_message(weather: Weather) -> str:
+        raise NotImplementedError
+
+
+class DefaultGreetingMessageStrategy(AbstractGreetingMessageStrategy):
+    @staticmethod
+    def generate_message(weather: Weather) -> str:
+        pass

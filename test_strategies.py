@@ -3,6 +3,7 @@ from typing import Callable, Dict
 import pytest
 
 from constants import WeatherStatus
+from model import DefaultGreetingMessageStrategy
 
 
 class TestDefaultGreetingMessageStrategy:
@@ -16,6 +17,6 @@ class TestDefaultGreetingMessageStrategy:
             temperature=weather_condition.get("temperature"),
             precipitation=weather_condition.get("precipitation"),
         )
-        greeting_message = DefaultGreetingMessageStrategy.generate_greeting_message(weather)
+        greeting_message = DefaultGreetingMessageStrategy.generate_message(weather)
 
         assert greeting_message == expected_message
