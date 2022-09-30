@@ -1,7 +1,7 @@
 import abc
 import dataclasses
 
-from constants import WeatherStatus
+from constants import WeatherStatus, GreetingMessage
 
 
 @dataclasses.dataclass(frozen=True)
@@ -21,4 +21,4 @@ class AbstractGreetingMessageStrategy(abc.ABC):
 class DefaultGreetingMessageStrategy(AbstractGreetingMessageStrategy):
     @staticmethod
     def generate_message(weather: Weather) -> str:
-        return "폭설이 내리고 있어요."
+        return GreetingMessage.HEAVY_SNOW

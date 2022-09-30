@@ -2,13 +2,18 @@ from typing import Callable, Dict
 
 import pytest
 
-from constants import WeatherStatus
+from constants import WeatherStatus, GreetingMessage
 from model import DefaultGreetingMessageStrategy
 
 
 class TestDefaultGreetingMessageStrategy:
     @pytest.mark.parametrize(
-        "weather_condition, expected_message", [(dict(status=WeatherStatus.SNOWY, precipitation=200.0), "폭설이 내리고 있어요.")]
+        "weather_condition, expected_message",
+        [
+            (dict(status=WeatherStatus.SNOWY, precipitation=200.0), GreetingMessage.HEAVY_SNOW),
+            (dict(status=WeatherStatus.SNOWY, precipitation=100.0), GreetingMessage.HEAVY_SNOW),
+            (dict(status=WeatherStatus.SNOWY, precipitation=50.0), GreetingMessage.SNOW),
+        ],
     )
     def test_greeting_messages(self, weather_condition: Dict, expected_message: str, get_weather: Callable):
         weather = get_weather(
