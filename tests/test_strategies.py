@@ -17,7 +17,7 @@ from src.domain.message_strategies import (
 )
 
 
-class TestMessageStrategy:
+class TestDefaultGreetingMessageStrategy:
     @pytest.mark.parametrize(
         "weather_condition, expected_message",
         [
@@ -45,7 +45,7 @@ class TestMessageStrategy:
             (dict(status=WeatherStatus.SUNNY, temperature=20.0), GreetingMessage.OTHERS),
         ],
     )
-    def test_default_greeting_messages(self, weather_condition: Dict, expected_message: str, get_weather: Callable):
+    def test_generate_message(self, weather_condition: Dict, expected_message: str, get_weather: Callable):
         current_weather = get_weather(
             hour_offset=0,
             status=weather_condition.get("status"),
@@ -57,6 +57,8 @@ class TestMessageStrategy:
 
         assert greeting_message == expected_message
 
+
+class TestDefaultTemperatureMessageStrategy:
     @pytest.mark.parametrize(
         "temperatures, expected_message",  # temperatures: (current, -6h, -12h, -18h, -24h)
         [
@@ -98,9 +100,7 @@ class TestMessageStrategy:
             ),
         ],
     )
-    def test_default_temperature_messages(
-        self, temperatures: Tuple, expected_message: str, get_weather: Callable[..., Weather]
-    ):
+    def test_generate_message(self, temperatures: Tuple, expected_message: str, get_weather: Callable[..., Weather]):
         weathers = (
             get_weather(hour_offset=i * -6, temperature=temperature) for i, temperature in enumerate(temperatures)
         )
@@ -108,6 +108,8 @@ class TestMessageStrategy:
 
         assert temperature_message == expected_message
 
+
+class TestDefaultHeadsUpMessageStrategy:
     @pytest.mark.parametrize(
         "weather_statuses, expected_message",  # weather_statuses: (+6h, +12h, +18h, +24h, +30h, +36h, +42h, +48h)
         [
@@ -178,7 +180,7 @@ class TestMessageStrategy:
             ),
         ],
     )
-    def test_default_heads_up_messages(
+    def test_generate_message(
         self, weather_statuses: Tuple[WeatherStatus], expected_message: str, get_forecast: Callable[..., Forecast]
     ):
         forecasts = (
