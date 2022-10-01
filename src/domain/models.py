@@ -43,3 +43,12 @@ class WeatherSummary:
     greeting_message_strategy: Type[AbstractGreetingMessageStrategy]
     temperature_message_strategy: Type[AbstractTemperatureMessageStrategy]
     heads_up_message_strategy: Type[AbstractHeadsUpMessageStrategy]
+
+    def generate_greeting_message(self) -> str:
+        return self.greeting_message_strategy.generate_message(self.weathers)
+
+    def generate_temperature_message(self) -> str:
+        return self.temperature_message_strategy.generate_message(self.weathers)
+
+    def generate_heads_up_message(self) -> str:
+        return self.heads_up_message_strategy.generate_message(self.forecasts)
