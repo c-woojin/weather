@@ -60,7 +60,9 @@ class TestDefaultGreetingMessageStrategy:
 
         assert greeting_message == expected_message
 
-    def test_raise_invalid_weather_hour_offset_error(self, get_weather: Callable[..., Weather]):
+    def test_raise_invalid_weather_hour_offset_error_when_not_given_current_weather(
+        self, get_weather: Callable[..., Weather]
+    ):
         weathers = (get_weather(hour_offset=-6), get_weather(hour_offset=-12), get_weather(hour_offset=-18))
 
         with pytest.raises(InvalidWeatherHourOffset):
@@ -116,6 +118,32 @@ class TestDefaultTemperatureMessageStrategy:
         temperature_message = DefaultTemperatureMessageStrategy.generate_message(tuple(weathers))
 
         assert temperature_message == expected_message
+
+    def test_raise_invalid_weather_hour_offset_error_when_not_given_current_weather(
+        self, get_weather: Callable[..., Weather]
+    ):
+        weathers = (
+            get_weather(hour_offset=-6),
+            get_weather(hour_offset=-12),
+            get_weather(hour_offset=-18),
+            get_weather(hour_offset=-24),
+        )
+
+        with pytest.raises(InvalidWeatherHourOffset):
+            DefaultTemperatureMessageStrategy.generate_message(weathers)
+
+    def test_raise_invalid_weather_hour_offset_error_when_not_given_weather_before_24h(
+        self, get_weather: Callable[..., Weather]
+    ):
+        weathers = (
+            get_weather(hour_offset=-0),
+            get_weather(hour_offset=-6),
+            get_weather(hour_offset=-12),
+            get_weather(hour_offset=-18),
+        )
+
+        with pytest.raises(InvalidWeatherHourOffset):
+            DefaultTemperatureMessageStrategy.generate_message(weathers)
 
 
 class TestDefaultHeadsUpMessageStrategy:
