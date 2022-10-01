@@ -17,3 +17,15 @@ class GreetingMessage(str, Enum):
     SUNNY = "따사로운 햇살을 맞으세요."
     COLD = "날이 참 춥네요."
     OTHERS = "날씨가 참 맑습니다."
+
+
+class TemperatureDifferenceMessage(str, Enum):
+    HOTTER = "어제보다 {temperature}도 더 덥습니다."
+    COLDER = "어제보다 {temperature}도 더 춥습니다."
+    LESS_HOT = "어제보다 {temperature}도 덜 덥습니다."
+    LESS_COLD = "어제보다 {temperature}도 덜 춥습니다."
+    AS_HOT_AS = "어제와 비슷하게 덥습니다."
+    AS_COLD_AS = "어제와 비슷하게 춥습니다."
+
+
+TemperatureMaxMinMessage = "최고기온은 {max}도, 최저기온은 {min}도 입니다."

@@ -1,12 +1,12 @@
-from typing import Callable, Dict
+from typing import Callable, Dict, Tuple
 
 import pytest
 
-from constants import WeatherStatus, GreetingMessage
+from constants import WeatherStatus, GreetingMessage, TemperatureMaxMinMessage, TemperatureDifferenceMessage
 from model import DefaultGreetingMessageStrategy
 
 
-class TestDefaultGreetingMessageStrategy:
+class TestMessageStrategy:
     @pytest.mark.parametrize(
         "weather_condition, expected_message",
         [
@@ -34,7 +34,7 @@ class TestDefaultGreetingMessageStrategy:
             (dict(status=WeatherStatus.SUNNY, temperature=20.0), GreetingMessage.OTHERS),
         ],
     )
-    def test_greeting_messages(self, weather_condition: Dict, expected_message: str, get_weather: Callable):
+    def test_default_greeting_messages(self, weather_condition: Dict, expected_message: str, get_weather: Callable):
         weather = get_weather(
             hour_offset=weather_condition.get("hour_offset"),
             status=weather_condition.get("status"),
@@ -44,3 +44,20 @@ class TestDefaultGreetingMessageStrategy:
         greeting_message = DefaultGreetingMessageStrategy.generate_message(weather)
 
         assert greeting_message == expected_message
+
+    @pytest.mark.parametrize(
+        "temperatures, expected_message",  # temperatures: (current, -6h, -12h, -18h, -24h)
+        [
+            (
+                (20.0, 21.0, 23.0, 24.0, 25.0),
+                f"{TemperatureDifferenceMessage.LESS_HOT.format(temperature=5.0)}, {TemperatureMaxMinMessage.format(max=25.0, min=20.0)}",
+            ),
+        ],
+    )
+    def test_default_temperature_messages(self, temperatures: Tuple, expected_message: str, get_weather: Callable):
+        weathers = (
+            get_weather(hour_offset=i * -6, temperature=temperature) for i, temperature in enumerate(temperatures)
+        )
+        temperature_message = DefaultTemperatureMessageStrategy.generate_message(tuple(weathers))
+
+        assert temperature_message == expected_message
