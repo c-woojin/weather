@@ -52,6 +52,38 @@ class TestMessageStrategy:
                 (20.0, 21.0, 23.0, 24.0, 25.0),
                 f"{TemperatureDifferenceMessage.LESS_HOT.format(difference=5.0)} {TemperatureMaxMinMessage.format(max=25.0, min=20.0)}",
             ),
+            (
+                (15.0, 21.0, 23.0, 24.0, 25.0),
+                f"{TemperatureDifferenceMessage.LESS_HOT.format(difference=10.0)} {TemperatureMaxMinMessage.format(max=25.0, min=15.0)}",
+            ),
+            (
+                (10.0, 21.0, 23.0, 24.0, 25.0),
+                f"{TemperatureDifferenceMessage.COLDER.format(difference=15.0)} {TemperatureMaxMinMessage.format(max=25.0, min=10.0)}",
+            ),
+            (
+                (20.0, 21.0, 23.0, 24.0, 15.0),
+                f"{TemperatureDifferenceMessage.HOTTER.format(difference=5.0)} {TemperatureMaxMinMessage.format(max=24.0, min=15.0)}",
+            ),
+            (
+                (15.0, 21.0, 23.0, 24.0, 10.0),
+                f"{TemperatureDifferenceMessage.HOTTER.format(difference=5.0)} {TemperatureMaxMinMessage.format(max=24.0, min=10.0)}",
+            ),
+            (
+                (10.0, 9.0, 11.0, 3.0, 5.0),
+                f"{TemperatureDifferenceMessage.LESS_COLD.format(difference=5.0)} {TemperatureMaxMinMessage.format(max=11.0, min=3.0)}",
+            ),
+            (
+                (20.0, 15.0, 11.0, 22.0, 20.0),
+                f"{TemperatureDifferenceMessage.AS_HOT_AS} {TemperatureMaxMinMessage.format(max=22.0, min=11.0)}",
+            ),
+            (
+                (15.0, 15.0, 11.0, 22.0, 15.0),
+                f"{TemperatureDifferenceMessage.AS_HOT_AS} {TemperatureMaxMinMessage.format(max=22.0, min=11.0)}",
+            ),
+            (
+                (10.0, 15.0, 11.0, 22.0, 10.0),
+                f"{TemperatureDifferenceMessage.AS_COLD_AS} {TemperatureMaxMinMessage.format(max=22.0, min=10.0)}",
+            ),
         ],
     )
     def test_default_temperature_messages(
