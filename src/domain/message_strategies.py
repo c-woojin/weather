@@ -14,26 +14,31 @@ from src.domain.errors import InvalidWeatherHourOffset
 
 class AbstractGreetingMessageStrategy(abc.ABC):
     @staticmethod
-    def generate_message(weather: Weather) -> str:
+    def generate_message(weathers: Tuple[Weather]) -> str:
         raise NotImplementedError
 
 
 class DefaultGreetingMessageStrategy(AbstractGreetingMessageStrategy):
     @staticmethod
-    def generate_message(weather: Weather) -> str:
-        if weather.status == WeatherStatus.SNOWY and weather.precipitation >= 100.0:
+    def generate_message(weathers: Tuple[Weather]) -> str:
+        try:
+            current_weather = next(w for w in weathers if w.hour_offset == 0)
+        except StopIteration:
+            raise InvalidWeatherHourOffset("There is no current weather.")
+
+        if current_weather.status == WeatherStatus.SNOWY and current_weather.precipitation >= 100.0:
             message = GreetingMessage.HEAVY_SNOW
-        elif weather.status == WeatherStatus.SNOWY:
+        elif current_weather.status == WeatherStatus.SNOWY:
             message = GreetingMessage.SNOW
-        elif weather.status == WeatherStatus.RAINY and weather.precipitation >= 100.0:
+        elif current_weather.status == WeatherStatus.RAINY and current_weather.precipitation >= 100.0:
             message = GreetingMessage.HEAVY_RAIN
-        elif weather.status == WeatherStatus.RAINY:
+        elif current_weather.status == WeatherStatus.RAINY:
             message = GreetingMessage.RAIN
-        elif weather.status == WeatherStatus.CLOUDY:
+        elif current_weather.status == WeatherStatus.CLOUDY:
             message = GreetingMessage.CLOUD
-        elif weather.status == WeatherStatus.SUNNY and weather.temperature >= 30.0:
+        elif current_weather.status == WeatherStatus.SUNNY and current_weather.temperature >= 30.0:
             message = GreetingMessage.SUNNY
-        elif weather.temperature <= 0.0:
+        elif current_weather.temperature <= 0.0:
             message = GreetingMessage.COLD
         else:
             message = GreetingMessage.OTHERS
