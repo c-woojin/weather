@@ -2,7 +2,13 @@ import abc
 import dataclasses
 from typing import Tuple, Dict
 
-from constants import WeatherStatus, GreetingMessage, TemperatureDifferenceMessage, TemperatureMaxMinMessage
+from constants import (
+    WeatherStatus,
+    GreetingMessage,
+    TemperatureDifferenceMessage,
+    TemperatureMaxMinMessage,
+    HeadsUpMessage,
+)
 
 
 class InvalidWeatherHourOffset(Exception):
@@ -15,6 +21,12 @@ class Weather:
     status: WeatherStatus
     temperature: float
     precipitation: float
+
+
+@dataclasses.dataclass(frozen=True)
+class Forecast:
+    hour_offset: int
+    status: WeatherStatus
 
 
 class AbstractGreetingMessageStrategy(abc.ABC):
@@ -99,3 +111,29 @@ class DefaultTemperatureMessageStrategy(AbstractTemperatureMessageStrategy):
     @staticmethod
     def _generate_max_min_message(temperatures: Tuple[float]) -> str:
         return TemperatureMaxMinMessage.format(max=max(temperatures), min=min(temperatures))
+
+
+class AbstractHeadsUpMessageStrategy(abc.ABC):
+    @staticmethod
+    def generate_message(forecasts: Tuple[Forecast]) -> str:
+        raise NotImplementedError
+
+
+class DefaultHeadsUpMessageStrategy(AbstractHeadsUpMessageStrategy):
+    @staticmethod
+    def generate_message(forecasts: Tuple[Forecast]) -> str:
+        snow_for_24h = (f for f in forecasts if f.status == WeatherStatus.SNOWY and f.hour_offset <= 24)
+        snow_for_48h = (f for f in forecasts if f.status == WeatherStatus.SNOWY and f.hour_offset <= 48)
+        rain_for_24h = (f for f in forecasts if f.status == WeatherStatus.RAINY and f.hour_offset <= 24)
+        rain_for_48h = (f for f in forecasts if f.status == WeatherStatus.RAINY and f.hour_offset <= 48)
+
+        if len(tuple(snow_for_24h)) >= 2:
+            return HeadsUpMessage.HEAVY_SNOW
+        elif len(tuple(snow_for_48h)) >= 2:
+            return HeadsUpMessage.SNOWY
+        elif len(tuple(rain_for_24h)) >= 2:
+            return HeadsUpMessage.HEAVY_RAIN
+        elif len(tuple(rain_for_48h)) >= 2:
+            return HeadsUpMessage.RAIN
+        else:
+            return HeadsUpMessage.OTHERS

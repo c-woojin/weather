@@ -9,7 +9,13 @@ from constants import (
     TemperatureDifferenceMessage,
     HeadsUpMessage,
 )
-from model import DefaultGreetingMessageStrategy, DefaultTemperatureMessageStrategy, Weather
+from model import (
+    DefaultGreetingMessageStrategy,
+    DefaultTemperatureMessageStrategy,
+    Weather,
+    Forecast,
+    DefaultHeadsUpMessageStrategy,
+)
 
 
 class TestMessageStrategy:
@@ -175,7 +181,9 @@ class TestMessageStrategy:
     def test_default_heads_up_messages(
         self, weather_statuses: Tuple[WeatherStatus], expected_message: str, get_forecast: Callable[..., Forecast]
     ):
-        forecasts = (get_forecast(i * 6) for i, status in enumerate(weather_statuses, start=1))
+        forecasts = (
+            get_forecast(hour_offset=i * 6, status=status) for i, status in enumerate(weather_statuses, start=1)
+        )
 
         message = DefaultHeadsUpMessageStrategy.generate_message(tuple(forecasts))
 
