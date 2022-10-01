@@ -29,3 +29,11 @@ class TemperatureDifferenceMessage(str, Enum):
 
 
 TemperatureMaxMinMessage = "최고기온은 {max}도, 최저기온은 {min}도 입니다."
+
+
+class HeadsUpMessage(str, Enum):
+    HEAVY_SNOW = "내일 폭설이 내릴 수도 있으니 외출 시 주의하세요."
+    SNOWY = "눈이 내릴 예정이니 외출 시 주의하세요."
+    HEAVY_RAIN = "폭우가 내릴 예정이에요. 우산을 미리 챙겨 두세요."
+    RAIN = "며칠동안 비 소식이 있어요."
+    OTHERS = "날씨는 대체로 평온할 예정이에요."

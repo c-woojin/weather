@@ -29,3 +29,19 @@ def get_weather():
         )
 
     return _weather
+
+
+@pytest.fixture(scope="function")
+def get_forecast():
+    def _forecast(
+        hour_offset: Optional[int] = None,
+        status: Optional[WeatherStatus] = None,
+    ):
+        return Forecast(
+            hour_offset=fake.random_choices(elements=(6, 12, 18, 24, 30, 36, 42, 48))
+            if hour_offset is None
+            else hour_offset,
+            status=fake.random_choices(elements=WeatherStatus) if status is None else status,
+        )
+
+    return _forecast

@@ -2,7 +2,13 @@ from typing import Callable, Dict, Tuple, Any
 
 import pytest
 
-from constants import WeatherStatus, GreetingMessage, TemperatureMaxMinMessage, TemperatureDifferenceMessage
+from constants import (
+    WeatherStatus,
+    GreetingMessage,
+    TemperatureMaxMinMessage,
+    TemperatureDifferenceMessage,
+    HeadsUpMessage,
+)
 from model import DefaultGreetingMessageStrategy, DefaultTemperatureMessageStrategy, Weather
 
 
@@ -95,3 +101,82 @@ class TestMessageStrategy:
         temperature_message = DefaultTemperatureMessageStrategy.generate_message(tuple(weathers))
 
         assert temperature_message == expected_message
+
+    @pytest.mark.parametrize(
+        "weather_statuses, expected_message",  # weather_statuses: (+6h, +12h, +18h, +24h, +30h, +36h, +42h, +48h)
+        [
+            (
+                (
+                    WeatherStatus.SNOWY,
+                    WeatherStatus.RAINY,
+                    WeatherStatus.SNOWY,
+                    WeatherStatus.RAINY,
+                    WeatherStatus.SUNNY,
+                    WeatherStatus.SUNNY,
+                    WeatherStatus.CLOUDY,
+                    WeatherStatus.CLOUDY,
+                ),
+                HeadsUpMessage.HEAVY_SNOW,
+            ),
+            (
+                (
+                    WeatherStatus.RAINY,
+                    WeatherStatus.RAINY,
+                    WeatherStatus.SNOWY,
+                    WeatherStatus.RAINY,
+                    WeatherStatus.SUNNY,
+                    WeatherStatus.SUNNY,
+                    WeatherStatus.SNOWY,
+                    WeatherStatus.CLOUDY,
+                ),
+                HeadsUpMessage.SNOWY,
+            ),
+            (
+                (
+                    WeatherStatus.RAINY,
+                    WeatherStatus.RAINY,
+                    WeatherStatus.SNOWY,
+                    WeatherStatus.RAINY,
+                    WeatherStatus.SUNNY,
+                    WeatherStatus.SUNNY,
+                    WeatherStatus.RAINY,
+                    WeatherStatus.CLOUDY,
+                ),
+                HeadsUpMessage.HEAVY_RAIN,
+            ),
+            (
+                (
+                    WeatherStatus.CLOUDY,
+                    WeatherStatus.RAINY,
+                    WeatherStatus.SNOWY,
+                    WeatherStatus.CLOUDY,
+                    WeatherStatus.SUNNY,
+                    WeatherStatus.SUNNY,
+                    WeatherStatus.RAINY,
+                    WeatherStatus.CLOUDY,
+                ),
+                HeadsUpMessage.RAIN,
+            ),
+            (
+                (
+                    WeatherStatus.CLOUDY,
+                    WeatherStatus.RAINY,
+                    WeatherStatus.SNOWY,
+                    WeatherStatus.CLOUDY,
+                    WeatherStatus.SUNNY,
+                    WeatherStatus.SUNNY,
+                    WeatherStatus.CLOUDY,
+                    WeatherStatus.CLOUDY,
+                ),
+                HeadsUpMessage.OTHERS,
+            ),
+        ],
+    )
+    def test_default_heads_up_messages(
+        self, weather_statuses: Tuple[WeatherStatus], expected_message: str, get_forecast: Callable[..., Forecast]
+    ):
+        forecasts = (get_forecast(i * 6) for i, status in enumerate(weather_statuses, start=1))
+
+        message = DefaultHeadsUpMessageStrategy.generate_message(tuple(forecasts))
+
+        assert message == expected_message
