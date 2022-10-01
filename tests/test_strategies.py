@@ -9,6 +9,7 @@ from src.domain.constants import (
     TemperatureDifferenceMessage,
     HeadsUpMessage,
 )
+from src.domain.errors import InvalidWeatherHourOffset
 from src.domain.models import Weather, Forecast
 from src.domain.message_strategies import (
     DefaultGreetingMessageStrategy,
@@ -45,7 +46,9 @@ class TestDefaultGreetingMessageStrategy:
             (dict(status=WeatherStatus.SUNNY, temperature=20.0), GreetingMessage.OTHERS),
         ],
     )
-    def test_generate_message(self, weather_condition: Dict, expected_message: str, get_weather: Callable):
+    def test_generate_message(
+        self, weather_condition: Dict, expected_message: str, get_weather: Callable[..., Weather]
+    ):
         current_weather = get_weather(
             hour_offset=0,
             status=weather_condition.get("status"),
@@ -56,6 +59,12 @@ class TestDefaultGreetingMessageStrategy:
         greeting_message = DefaultGreetingMessageStrategy.generate_message(weathers)
 
         assert greeting_message == expected_message
+
+    def test_raise_invalid_weather_hour_offset_error(self, get_weather: Callable[..., Weather]):
+        weathers = (get_weather(hour_offset=-6), get_weather(hour_offset=-12), get_weather(hour_offset=-18))
+
+        with pytest.raises(InvalidWeatherHourOffset):
+            DefaultGreetingMessageStrategy.generate_message(weathers)
 
 
 class TestDefaultTemperatureMessageStrategy:
