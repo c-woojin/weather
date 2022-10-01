@@ -4,3 +4,4 @@ faker==15.0.0
 
 # lint & formatting
 black==22.8.0
+flake8==5.0.4
