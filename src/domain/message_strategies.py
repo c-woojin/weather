@@ -14,13 +14,13 @@ from src.domain.errors import InvalidWeatherHourOffset
 
 class AbstractGreetingMessageStrategy(abc.ABC):
     @staticmethod
-    def generate_message(weathers: Tuple[Weather]) -> str:
+    def generate_message(weathers: Tuple[Weather, ...]) -> str:
         raise NotImplementedError
 
 
 class DefaultGreetingMessageStrategy(AbstractGreetingMessageStrategy):
     @staticmethod
-    def generate_message(weathers: Tuple[Weather]) -> str:
+    def generate_message(weathers: Tuple[Weather, ...]) -> str:
         try:
             current_weather = next(w for w in weathers if w.hour_offset == 0)
         except StopIteration:
@@ -48,13 +48,13 @@ class DefaultGreetingMessageStrategy(AbstractGreetingMessageStrategy):
 
 class AbstractTemperatureMessageStrategy(abc.ABC):
     @staticmethod
-    def generate_message(weathers: Tuple[Weather]) -> str:
+    def generate_message(weathers: Tuple[Weather, ...]) -> str:
         raise NotImplementedError
 
 
 class DefaultTemperatureMessageStrategy(AbstractTemperatureMessageStrategy):
     @staticmethod
-    def generate_message(weathers: Tuple[Weather]) -> str:
+    def generate_message(weathers: Tuple[Weather, ...]) -> str:
         temperatures_by_hour_offset: Dict[int, float] = {
             weather.hour_offset: weather.temperature for weather in weathers
         }
@@ -97,19 +97,19 @@ class DefaultTemperatureMessageStrategy(AbstractTemperatureMessageStrategy):
         return message
 
     @staticmethod
-    def _generate_max_min_message(temperatures: Tuple[float]) -> str:
+    def _generate_max_min_message(temperatures: Tuple[float, ...]) -> str:
         return TemperatureMaxMinMessage.format(max=max(temperatures), min=min(temperatures))
 
 
 class AbstractHeadsUpMessageStrategy(abc.ABC):
     @staticmethod
-    def generate_message(forecasts: Tuple[Forecast]) -> str:
+    def generate_message(forecasts: Tuple[Forecast, ...]) -> str:
         raise NotImplementedError
 
 
 class DefaultHeadsUpMessageStrategy(AbstractHeadsUpMessageStrategy):
     @staticmethod
-    def generate_message(forecasts: Tuple[Forecast]) -> str:
+    def generate_message(forecasts: Tuple[Forecast, ...]) -> str:
         snow_for_24h = (f for f in forecasts if f.status == WeatherStatus.SNOWY and f.hour_offset <= 24)
         snow_for_48h = (f for f in forecasts if f.status == WeatherStatus.SNOWY and f.hour_offset <= 48)
         rain_for_24h = (f for f in forecasts if f.status == WeatherStatus.RAINY and f.hour_offset <= 24)
