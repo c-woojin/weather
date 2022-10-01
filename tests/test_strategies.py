@@ -46,13 +46,14 @@ class TestMessageStrategy:
         ],
     )
     def test_default_greeting_messages(self, weather_condition: Dict, expected_message: str, get_weather: Callable):
-        weather = get_weather(
-            hour_offset=weather_condition.get("hour_offset"),
+        current_weather = get_weather(
+            hour_offset=0,
             status=weather_condition.get("status"),
             temperature=weather_condition.get("temperature"),
             precipitation=weather_condition.get("precipitation"),
         )
-        greeting_message = DefaultGreetingMessageStrategy.generate_message(weather)
+        weathers = (current_weather, get_weather(hour_offset=-6), get_weather(hour_offset=12))
+        greeting_message = DefaultGreetingMessageStrategy.generate_message(weathers)
 
         assert greeting_message == expected_message
 
