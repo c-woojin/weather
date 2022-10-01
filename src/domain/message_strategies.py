@@ -1,8 +1,13 @@
 import abc
 from typing import Tuple, Dict
 
-from src.domain.constants import WeatherStatus, GreetingMessage, TemperatureDifferenceMessage, TemperatureMaxMinMessage, \
-    HeadsUpMessage
+from src.domain.constants import (
+    WeatherStatus,
+    GreetingMessage,
+    TemperatureDifferenceMessage,
+    TemperatureMaxMinMessage,
+    HeadsUpMessage,
+)
 from src.domain.models import Weather, Forecast
 from src.domain.errors import InvalidWeatherHourOffset
 

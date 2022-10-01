@@ -10,8 +10,11 @@ from src.domain.constants import (
     HeadsUpMessage,
 )
 from src.domain.models import Weather, Forecast
-from src.domain.message_strategies import DefaultGreetingMessageStrategy, DefaultTemperatureMessageStrategy, \
-    DefaultHeadsUpMessageStrategy
+from src.domain.message_strategies import (
+    DefaultGreetingMessageStrategy,
+    DefaultTemperatureMessageStrategy,
+    DefaultHeadsUpMessageStrategy,
+)
 
 
 class TestMessageStrategy:
