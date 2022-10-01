@@ -20,10 +20,10 @@ class GreetingMessage(str, Enum):
 
 
 class TemperatureDifferenceMessage(str, Enum):
-    HOTTER = "어제보다 {temperature}도 더 덥습니다."
-    COLDER = "어제보다 {temperature}도 더 춥습니다."
-    LESS_HOT = "어제보다 {temperature}도 덜 덥습니다."
-    LESS_COLD = "어제보다 {temperature}도 덜 춥습니다."
+    HOTTER = "어제보다 {difference}도 더 덥습니다."
+    COLDER = "어제보다 {difference}도 더 춥습니다."
+    LESS_HOT = "어제보다 {difference}도 덜 덥습니다."
+    LESS_COLD = "어제보다 {difference}도 덜 춥습니다."
     AS_HOT_AS = "어제와 비슷하게 덥습니다."
     AS_COLD_AS = "어제와 비슷하게 춥습니다."
 

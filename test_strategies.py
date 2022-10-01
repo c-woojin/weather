@@ -1,9 +1,9 @@
-from typing import Callable, Dict, Tuple
+from typing import Callable, Dict, Tuple, Any
 
 import pytest
 
 from constants import WeatherStatus, GreetingMessage, TemperatureMaxMinMessage, TemperatureDifferenceMessage
-from model import DefaultGreetingMessageStrategy
+from model import DefaultGreetingMessageStrategy, DefaultTemperatureMessageStrategy, Weather
 
 
 class TestMessageStrategy:
@@ -50,11 +50,13 @@ class TestMessageStrategy:
         [
             (
                 (20.0, 21.0, 23.0, 24.0, 25.0),
-                f"{TemperatureDifferenceMessage.LESS_HOT.format(temperature=5.0)}, {TemperatureMaxMinMessage.format(max=25.0, min=20.0)}",
+                f"{TemperatureDifferenceMessage.LESS_HOT.format(difference=5.0)} {TemperatureMaxMinMessage.format(max=25.0, min=20.0)}",
             ),
         ],
     )
-    def test_default_temperature_messages(self, temperatures: Tuple, expected_message: str, get_weather: Callable):
+    def test_default_temperature_messages(
+        self, temperatures: Tuple, expected_message: str, get_weather: Callable[..., Weather]
+    ):
         weathers = (
             get_weather(hour_offset=i * -6, temperature=temperature) for i, temperature in enumerate(temperatures)
         )
