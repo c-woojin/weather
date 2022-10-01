@@ -1,0 +1,2 @@
+class InvalidWeatherHourOffset(Exception):
+    pass

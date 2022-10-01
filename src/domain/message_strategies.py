@@ -1,32 +1,10 @@
 import abc
-import dataclasses
 from typing import Tuple, Dict
 
-from constants import (
-    WeatherStatus,
-    GreetingMessage,
-    TemperatureDifferenceMessage,
-    TemperatureMaxMinMessage,
-    HeadsUpMessage,
-)
-
-
-class InvalidWeatherHourOffset(Exception):
-    pass
-
-
-@dataclasses.dataclass(frozen=True)
-class Weather:
-    hour_offset: int
-    status: WeatherStatus
-    temperature: float
-    precipitation: float
-
-
-@dataclasses.dataclass(frozen=True)
-class Forecast:
-    hour_offset: int
-    status: WeatherStatus
+from src.domain.constants import WeatherStatus, GreetingMessage, TemperatureDifferenceMessage, TemperatureMaxMinMessage, \
+    HeadsUpMessage
+from src.domain.models import Weather, Forecast
+from src.domain.errors import InvalidWeatherHourOffset
 
 
 class AbstractGreetingMessageStrategy(abc.ABC):

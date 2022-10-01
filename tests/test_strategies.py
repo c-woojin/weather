@@ -1,21 +1,17 @@
-from typing import Callable, Dict, Tuple, Any
+from typing import Callable, Dict, Tuple
 
 import pytest
 
-from constants import (
+from src.domain.constants import (
     WeatherStatus,
     GreetingMessage,
     TemperatureMaxMinMessage,
     TemperatureDifferenceMessage,
     HeadsUpMessage,
 )
-from model import (
-    DefaultGreetingMessageStrategy,
-    DefaultTemperatureMessageStrategy,
-    Weather,
-    Forecast,
-    DefaultHeadsUpMessageStrategy,
-)
+from src.domain.models import Weather, Forecast
+from src.domain.message_strategies import DefaultGreetingMessageStrategy, DefaultTemperatureMessageStrategy, \
+    DefaultHeadsUpMessageStrategy
 
 
 class TestMessageStrategy:
