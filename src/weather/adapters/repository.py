@@ -6,7 +6,11 @@ from typing import Dict, Type, Tuple, Any, Optional
 import aiohttp
 from aiohttp import ClientSession, ClientTimeout
 
-from weather.adapters.errors import InvalidMessageStrategy, WeatherSummaryRepositoryTimeout, WeatherSummaryRepositoryError
+from weather.adapters.errors import (
+    InvalidMessageStrategy,
+    WeatherSummaryRepositoryTimeout,
+    WeatherSummaryRepositoryError,
+)
 from weather.configs import DROOM_WEATHER_API_BASE_URL, DROOM_API_KEY, TIMEOUT_SECONDS
 from weather.domain.message_strategies import (
     AbstractGreetingMessageStrategy,
