@@ -4,10 +4,10 @@ from datetime import datetime
 from typing import Dict, Type, Tuple
 
 import aiohttp
-from aiohttp import ClientSession
+from aiohttp import ClientSession, ClientTimeout
 
-from src.adapters.errors import InvalidMessageStrategy
-from src.configs import DROOM_WEATHER_API_BASE_URL, DROOM_API_KEY
+from src.adapters.errors import InvalidMessageStrategy, APITimeout
+from src.configs import DROOM_WEATHER_API_BASE_URL, DROOM_API_KEY, TIMEOUT_SECONDS
 from src.domain.message_strategies import (
     AbstractGreetingMessageStrategy,
     DefaultGreetingMessageStrategy,
@@ -43,6 +43,7 @@ class DroomWeatherSummaryRepository(AbstractWeatherSummaryRepository):
             forecast="/forecast/hourly",
         )
         self.api_key = DROOM_API_KEY
+        self.timeout = ClientTimeout(total=TIMEOUT_SECONDS)
 
     async def get_weather_summary(self, location: Location, message_strategy: str) -> WeatherSummary:
         try:
@@ -50,12 +51,15 @@ class DroomWeatherSummaryRepository(AbstractWeatherSummaryRepository):
         except KeyError:
             raise InvalidMessageStrategy(f"Invalid message strategy({message_strategy})")
 
-        async with aiohttp.ClientSession(self.base_url) as session:
-            aws = [
-                self._get_weathers(location=location, session=session),
-                self._get_forecasts(location=location, session=session),
-            ]
-            weathers, forecasts = await asyncio.gather(*aws)
+        try:
+            async with aiohttp.ClientSession(self.base_url, timeout=self.timeout) as session:
+                aws = [
+                    self._get_weathers(location=location, session=session),
+                    self._get_forecasts(location=location, session=session),
+                ]
+                weathers, forecasts = await asyncio.gather(*aws)
+        except asyncio.TimeoutError:
+            raise APITimeout()
 
         return WeatherSummary(
             location=location,
