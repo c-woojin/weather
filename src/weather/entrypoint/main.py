@@ -4,7 +4,6 @@ from fastapi.responses import JSONResponse
 
 from weather.adapters import repository
 from weather.adapters.errors import WeatherSummaryRepositoryTimeout
-from weather.domain import models
 from weather.services import services
 
 app = FastAPI()
@@ -17,12 +16,13 @@ async def validation_exception_handler(request, exc):
 
 @app.get("/summary")
 async def summary(lat: float = Query(ge=-90, le=90), lon: float = Query(ge=-180, le=180)):
+    repo = repository.DroomWeatherSummaryRepository()
+
     try:
-        repo = repository.DroomWeatherSummaryRepository()
-        location = models.Location(latitude=lat, longitude=lon)
-        summary_messages = await services.get_weather_summary_messages(location=location, repo=repo)
+        summary_messages = await services.get_weather_summary_messages(latitude=lat, longitude=lon, repo=repo)
     except WeatherSummaryRepositoryTimeout:
         raise HTTPException(status_code=408)
     except Exception:
         raise HTTPException(status_code=500)
+
     return dict(summary=summary_messages)
