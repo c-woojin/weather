@@ -1,0 +1,2 @@
+class InvalidMessageStrategy(Exception):
+    pass
