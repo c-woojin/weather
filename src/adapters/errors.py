@@ -1,5 +1,10 @@
 class InvalidMessageStrategy(Exception):
     pass
 
-class APITimeout(Exception):
+
+class WeatherSummaryRepositoryTimeout(Exception):
+    pass
+
+
+class WeatherSummaryRepositoryError(Exception):
     pass

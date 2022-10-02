@@ -1,12 +1,12 @@
 import abc
 import asyncio
 from datetime import datetime
-from typing import Dict, Type, Tuple
+from typing import Dict, Type, Tuple, Any, Optional
 
 import aiohttp
 from aiohttp import ClientSession, ClientTimeout
 
-from src.adapters.errors import InvalidMessageStrategy, APITimeout
+from src.adapters.errors import InvalidMessageStrategy, WeatherSummaryRepositoryTimeout, WeatherSummaryRepositoryError
 from src.configs import DROOM_WEATHER_API_BASE_URL, DROOM_API_KEY, TIMEOUT_SECONDS
 from src.domain.message_strategies import (
     AbstractGreetingMessageStrategy,
@@ -34,6 +34,13 @@ class AbstractWeatherSummaryRepository(abc.ABC):
         raise NotImplementedError
 
 
+async def _get(session: ClientSession, endpoint: str, params: Optional[Dict[str, Any]] = None) -> Dict[Any, Any]:
+    async with session.get(endpoint, params=params) as resp:
+        if resp.status == 200:
+            return await resp.json()
+        raise WeatherSummaryRepositoryError()
+
+
 class DroomWeatherSummaryRepository(AbstractWeatherSummaryRepository):
     def __init__(self):
         self.base_url: str = DROOM_WEATHER_API_BASE_URL
@@ -59,7 +66,7 @@ class DroomWeatherSummaryRepository(AbstractWeatherSummaryRepository):
                 ]
                 weathers, forecasts = await asyncio.gather(*aws)
         except asyncio.TimeoutError:
-            raise APITimeout()
+            raise WeatherSummaryRepositoryTimeout()
 
         return WeatherSummary(
             location=location,
@@ -96,8 +103,7 @@ class DroomWeatherSummaryRepository(AbstractWeatherSummaryRepository):
             endpoint = self.endpoints["historical"]
             params["hour_offset"] = hour_offset
 
-        async with session.get(endpoint, params=params) as resp:
-            result = await resp.json()
+        result = await _get(session=session, endpoint=endpoint, params=params)
 
         return Weather(
             hour_offset=hour_offset,
@@ -110,7 +116,6 @@ class DroomWeatherSummaryRepository(AbstractWeatherSummaryRepository):
         endpoint = self.endpoints["forecast"]
         params = dict(lat=location.latitude, lon=location.longitude, hour_offset=hour_offset, api_key=self.api_key)
 
-        async with session.get(endpoint, params=params) as resp:
-            result = await resp.json()
+        result = await _get(session=session, endpoint=endpoint, params=params)
 
         return Forecast(hour_offset=hour_offset, status=result["code"])
