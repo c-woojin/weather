@@ -1,7 +1,7 @@
 import abc
 import asyncio
 from datetime import datetime
-from typing import Dict, Type, Tuple, List
+from typing import Dict, Type, Tuple
 
 import aiohttp
 from aiohttp import ClientSession
