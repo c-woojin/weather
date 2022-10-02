@@ -30,7 +30,7 @@ MESSAGE_STRATEGY: Dict[
 
 class AbstractWeatherSummaryRepository(abc.ABC):
     @abc.abstractmethod
-    def get_weather_summary(self, location: Location, message_strategy: str) -> WeatherSummary:
+    async def get_weather_summary(self, location: Location, message_strategy: str) -> WeatherSummary:
         raise NotImplementedError
 
 
