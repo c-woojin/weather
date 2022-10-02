@@ -17,7 +17,6 @@ make down
 ```shell
 make test
 ```
-
 ## Native environment(python virtualenv)
 You need to create a Python virtualenv in advance.
 ```shell
@@ -32,3 +31,5 @@ make test-native
 # run server
 make up-native
 ```
+## Diagram(Dependency relationship)
+![img.png](img.png)
