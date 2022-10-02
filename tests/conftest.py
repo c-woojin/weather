@@ -3,8 +3,8 @@ from typing import Optional
 import pytest
 from faker import Faker
 
-from src.domain.constants import WeatherStatus
-from src.domain.models import Weather, Forecast
+from weather.domain.constants import WeatherStatus
+from weather.domain.models import Weather, Forecast
 
 fake = Faker()
 

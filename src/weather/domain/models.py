@@ -4,10 +4,10 @@ import dataclasses
 from datetime import datetime
 from typing import Tuple, Type, TYPE_CHECKING
 
-from src.domain.constants import WeatherStatus
+from weather.domain.constants import WeatherStatus
 
 if TYPE_CHECKING:
-    from src.domain.message_strategies import (
+    from weather.domain.message_strategies import (
         AbstractGreetingMessageStrategy,
         AbstractTemperatureMessageStrategy,
         AbstractHeadsUpMessageStrategy,

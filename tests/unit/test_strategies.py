@@ -2,16 +2,16 @@ from typing import Callable, Dict, Tuple
 
 import pytest
 
-from src.domain.constants import (
+from weather.domain.constants import (
     WeatherStatus,
     GreetingMessage,
     TemperatureMaxMinMessage,
     TemperatureDifferenceMessage,
     HeadsUpMessage,
 )
-from src.domain.errors import InvalidWeatherHourOffset
-from src.domain.models import Weather, Forecast
-from src.domain.message_strategies import (
+from weather.domain.errors import InvalidWeatherHourOffset
+from weather.domain.models import Weather, Forecast
+from weather.domain.message_strategies import (
     DefaultGreetingMessageStrategy,
     DefaultTemperatureMessageStrategy,
     DefaultHeadsUpMessageStrategy,

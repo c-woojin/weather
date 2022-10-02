@@ -2,10 +2,10 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
-from src.adapters import repository
-from src.adapters.errors import WeatherSummaryRepositoryTimeout
-from src.domain import models
-from src.services import services
+from weather.adapters import repository
+from weather.adapters.errors import WeatherSummaryRepositoryTimeout
+from weather.domain import models
+from weather.services import services
 
 app = FastAPI()
 

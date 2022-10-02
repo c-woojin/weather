@@ -6,9 +6,9 @@ from typing import Dict, Type, Tuple, Any, Optional
 import aiohttp
 from aiohttp import ClientSession, ClientTimeout
 
-from src.adapters.errors import InvalidMessageStrategy, WeatherSummaryRepositoryTimeout, WeatherSummaryRepositoryError
-from src.configs import DROOM_WEATHER_API_BASE_URL, DROOM_API_KEY, TIMEOUT_SECONDS
-from src.domain.message_strategies import (
+from weather.adapters.errors import InvalidMessageStrategy, WeatherSummaryRepositoryTimeout, WeatherSummaryRepositoryError
+from weather.configs import DROOM_WEATHER_API_BASE_URL, DROOM_API_KEY, TIMEOUT_SECONDS
+from weather.domain.message_strategies import (
     AbstractGreetingMessageStrategy,
     DefaultGreetingMessageStrategy,
     AbstractTemperatureMessageStrategy,
@@ -16,7 +16,7 @@ from src.domain.message_strategies import (
     AbstractHeadsUpMessageStrategy,
     DefaultHeadsUpMessageStrategy,
 )
-from src.domain.models import WeatherSummary, Location, Weather, Forecast
+from weather.domain.models import WeatherSummary, Location, Weather, Forecast
 
 MESSAGE_STRATEGY: Dict[
     str,

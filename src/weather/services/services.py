@@ -1,7 +1,7 @@
 from typing import Dict
 
-from src.adapters.repository import AbstractWeatherSummaryRepository
-from src.domain.models import Location
+from weather.adapters.repository import AbstractWeatherSummaryRepository
+from weather.domain.models import Location
 
 
 async def get_weather_summary_messages(location: Location, repo: AbstractWeatherSummaryRepository) -> Dict[str, str]:

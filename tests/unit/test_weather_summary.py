@@ -1,12 +1,12 @@
 import datetime
 from typing import Callable, Tuple
 
-from src.domain.message_strategies import (
+from weather.domain.message_strategies import (
     AbstractGreetingMessageStrategy,
     AbstractTemperatureMessageStrategy,
     AbstractHeadsUpMessageStrategy,
 )
-from src.domain.models import WeatherSummary, Location, Weather, Forecast
+from weather.domain.models import WeatherSummary, Location, Weather, Forecast
 
 
 class FakeGreetingMessageStrategy(AbstractGreetingMessageStrategy):
