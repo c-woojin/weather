@@ -24,3 +24,12 @@ up-native:
 
 test-native:
 	pytest
+
+compile:
+	pip install -U pip pip-tools
+	pip-compile
+
+install:
+	pip install -U pip pip-tools
+	pip-sync
+	pip install -e src
